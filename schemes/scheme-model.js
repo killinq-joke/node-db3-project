@@ -3,7 +3,9 @@ const db = require("../configs");
 module.exports = {
   find,
   findById,
-  findSteps
+  findSteps,
+  add,
+  addStep
 };
 
 function find() {
@@ -32,6 +34,14 @@ function findSteps(id) {
     .orderBy("step_number");
 }
 
-function add(schemeData) {
-  return db.insert(schemeData);
+function add(scheme) {
+  return db("schemes").insert(scheme)
+  .then(id => {
+      console.log(id)
+      return findById(id[0])
+  })
+}
+
+function addStep() {
+    return db("schemes")
 }
