@@ -68,6 +68,6 @@ function remove(id) {
   } else {
     return db("schemes")
       .del()
-      .where({ id });
+      .where({ id })
   }
 }
