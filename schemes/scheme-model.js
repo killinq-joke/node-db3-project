@@ -6,7 +6,8 @@ module.exports = {
   findSteps,
   add,
   addStep,
-  update
+  update,
+  remove
 };
 
 function find() {
@@ -36,20 +37,33 @@ function findSteps(id) {
 }
 
 function add(scheme) {
-  return db("schemes").insert(scheme)
-  .then(id => {
-      console.log(id)
-      return findById(id[0])
-  })
+  return db("schemes")
+    .insert(scheme)
+    .then(id => {
+      console.log(id);
+      return findById(id[0]);
+    });
 }
 
 function addStep() {
-    return db("schemes")
+  return db("schemes");
 }
 
 function update(changes, id) {
-    return db("schemes").update(changes).where({id})
+  return db("schemes")
+    .update(changes)
+    .where({ id })
     .then(() => {
-        return findById(id)
-    })
+      return findById(id);
+    });
+}
+
+function remove(id) {
+  if (isNaN(id)) {
+    return null;
+  } else {
+    return db("schemes")
+      .del()
+      .where({ id });
+  }
 }
