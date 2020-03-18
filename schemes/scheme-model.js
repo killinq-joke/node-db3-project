@@ -45,8 +45,12 @@ function add(scheme) {
     });
 }
 
-function addStep() {
-  return db("schemes");
+function addStep(step, schemeId) {
+    step.scheme_id = schemeId
+  return db("steps").insert(step)
+  .then(ids => {
+      return db("steps").where('id', ids[0])
+  })
 }
 
 function update(changes, id) {
