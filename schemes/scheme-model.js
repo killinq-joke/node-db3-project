@@ -1,18 +1,24 @@
-const db = require("../configs")
+const db = require("../configs");
 
 module.exports = {
-    find,
-    findById
-}
+  find,
+  findById,
+  findSteps
+};
 
 function find() {
-    return db("schemes")
+  return db("schemes");
 }
 
 function findById(id) {
-    return db("schemes").where({id})
+  return db("schemes").where({ id });
 }
 
-function findSteps() {
-    return db("schemes")
+function findSteps(id) {
+  return db
+    .select("scheme_name", "steps.id", "steps.step_number", "steps.instructions")
+    .from("schemes")
+    .join("steps", { "schemes.id": "steps.scheme_id" })
+    .where("schemes.id", id)
+    .orderBy("step_number")
 }
