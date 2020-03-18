@@ -31,3 +31,61 @@ JOIN customer AS c
     ON customerId = c.id
 JOIN employee AS e
     ON employeeId = e.id
+
+--Find the number of shipments by each shipper
+
+SELECT ShipperName, count(orders.shipperId) as ShipmentNumber
+FROM [Orders]
+JOIN shippers
+	ON Orders.shipperID = shippers.ShipperID
+GROUP BY ShipperName
+
+--Find the top 5 best performing employees measured in revenue
+
+SELECT (firstname || ' ' || lastname) as TOP5_Employees,  SUM(p.price * quantity) as revenue FROM [Employees] as e
+join orders as o
+	on o.employeeid = e.employeeid
+join orderdetails as od
+	on od.orderid = o.orderid
+join products as p
+	on p.productid = od.productid
+group by TOP5_Employees
+order by revenue desc
+limit 5
+
+
+--Find the product category that brings in the most revenue
+
+SELECT categoryname, SUM(price * quantity) as revenue
+FROM [Products] as p
+join categories as c
+	on c.categoryid = p.categoryid
+join orderdetails as od
+	on od.productid = p.productid
+group by c.categoryid
+order by c.categoryid
+
+--Find the customer country with the most orders
+
+SELECT country, SUM(quantity) as orders FROM [Customers] as c
+join orders as o
+	on o.customerid = c.customerid
+join orderdetails as od
+	on od.orderid = o.orderid
+group by country
+order by orders desc
+
+--Find the shipper that moves the most cheese measured in units
+
+SELECT s.shippername, sum(quantity) as cheese_moved FROM Shippers as s
+join orders as o
+	on o.shipperid = s.shipperid
+join orderdetails as od
+	on od.orderid = o.orderid
+join products as p
+	on p.productid = od.productid
+join categories as c
+	on c.categoryid = p.categoryid
+where c.categoryid = 4
+group by s.shipperid
+order by s.shipperid
