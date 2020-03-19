@@ -98,13 +98,13 @@ router.put('/:id', (req, res) => {
   });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async(req, res) => {
   const { id } = req.params;
-
+  const car = await Schemes.findById(id)
   Schemes.remove(id)
   .then(deleted => {
     if (deleted) {
-      res.json({ removed: deleted });
+      res.json({ removed: car});
     } else {
       res.status(404).json({ message: 'Could not find scheme with given id' });
     }
